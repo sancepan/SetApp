@@ -7,21 +7,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity"
-    android:paddingHorizontal="20dp"
-    android:paddingVertical="20dp">
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="15dp"
+    android:background="#f2f2f2">
 
     <LinearLayout
         android:id="@+id/head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="15dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="<"
+            android:text="Back"
             android:textColor="@color/gray"
             android:background="@null"
             android:textStyle="bold"
@@ -34,6 +35,7 @@
             android:layout_weight="2"
             android:layout_height="wrap_content"
             android:text="Апрель 2022"
+            android:textStyle="bold"
             android:textSize="20sp"
             android:textAlignment="center"
             android:textColor="@color/black"/>
@@ -42,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text=">"
+            android:text="forw"
             android:textColor="@color/gray"
             android:background="@null"
             android:textStyle="bold"
@@ -133,20 +135,20 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calendarRecyclerView"
-        android:layout_below="@+id/calendar_days"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="230dp"
+        android:layout_below="@+id/calendar_days" />
 
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/calendarRecyclerView"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:text="20 апреля 2022"
         android:textColor="@color/gray"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:textStyle="bold">
 
     </TextView>
