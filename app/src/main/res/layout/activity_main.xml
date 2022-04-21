@@ -154,10 +154,10 @@
     </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/taning"
-        android:layout_below="@+id/date"
+        android:id="@+id/setsRecycleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
@@ -168,6 +168,7 @@
         android:paddingHorizontal="20dp"
         android:text="Добавить упражнение"
         android:textAllCaps="false"
+        android:onClick="addSet"
         android:textColor="@color/white"
         android:textSize="18dp"
         android:textStyle="bold"/>
