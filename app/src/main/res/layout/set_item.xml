@@ -3,25 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/set_bckg"
-    android:paddingHorizontal="50dp"
-    android:paddingVertical="20dp">
+    android:paddingHorizontal="25dp"
+    android:paddingVertical="18dp">
 
     <TextView
         android:id="@+id/set_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Жим штанги в наклоне"
+        android:text=""
         android:textColor="@color/gray"
         android:textSize="16dp">
     </TextView>
 
-    <TextView
+    <GridLayout
         android:id="@+id/sets"
-        android:layout_below="@+id/set_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="1: 15x15"
-        android:textColor="@color/light_gray"
-        android:textSize="16dp">
-    </TextView>
+        android:columnCount="3"
+        android:layout_below="@+id/set_title">
+
+    </GridLayout>
+
 </RelativeLayout>

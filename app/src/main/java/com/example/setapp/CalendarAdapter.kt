@@ -5,10 +5,7 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 
-class CalendarAdapter(_daysOfMonth: ArrayList<String>, _onItemListener: OnItemListener): RecyclerView.Adapter<CalendarViewHolder>(){
-
-    private val daysOfMonth: ArrayList<String> = _daysOfMonth
-    private val onItemListener: OnItemListener = _onItemListener
+class CalendarAdapter(private val daysOfMonth: ArrayList<String>, private val onItemListener: OnItemListener): RecyclerView.Adapter<CalendarViewHolder>(){
 
     @NonNull
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): CalendarViewHolder {

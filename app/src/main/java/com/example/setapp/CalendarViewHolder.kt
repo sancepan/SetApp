@@ -5,12 +5,10 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CalendarViewHolder(itemView: View, _onItemListener: CalendarAdapter.OnItemListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+class CalendarViewHolder(itemView: View, private val onItemListener: CalendarAdapter.OnItemListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
     /** TextView для элемента (числа) календаря */
     val daysOfMonth: TextView = itemView.findViewById(R.id.cellDayText)
-    /** Экземпляр OnItemListener для обработки нажатий на элемент календаря*/
-    private val onItemListener: CalendarAdapter.OnItemListener = _onItemListener
 
     init {
         itemView.setOnClickListener(this)

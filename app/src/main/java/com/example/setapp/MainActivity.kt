@@ -4,7 +4,10 @@ import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
+import android.widget.GridLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,7 +17,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener{
+class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener, SetAdapter.OnItemListener{
 
     /** TextView для загаловка с датой формата  MMMM-yyyy */
     private lateinit var monthYearText: TextView
@@ -25,14 +28,26 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener{
 
     /** Экземпляр RecyclerView для календаря */
     private lateinit var setsRecycleView: RecyclerView
+
     /** Список упражнений, в которые входит название и списко подходов */
     private val setsList: ArrayList<SetsCard> = ArrayList()
+    // Создаем объект адаптера и менеджера
+    private val setAdapter = SetAdapter(setsList, this)
+
+    val sets: ArrayList<Set> = ArrayList()
+
+    var x: Int = 0
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Создаем объект подхода
+        val newSet = Set(1, 15, 15)
+        // Создаем массив из 5 объектов ранее созданного подхода
+        for(i in 1..5) sets.add(newSet)
 
         initWidgets()
         selectedDate = LocalDate.now()
@@ -49,16 +64,26 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener{
         setsRecycleView = findViewById(R.id.setsRecycleView)
     }
 
+    /**  */
+    private fun setSet()
+    {
+
+    }
+
+
     /** Пересобирает адаптер для нового ArrayList */
     private fun setSetView()
     {
-
-        // Создаем объект адаптера и менеджера
-        val setAdapter = SetAdapter(setsList)
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 1)
         // Присваеваем ранее созданные объекты адаптера и менеджера объекту RecycleView
         setsRecycleView.layoutManager = layoutManager
         setsRecycleView.adapter = setAdapter
+
+        // Если декорация не задана, добавляем ее (инетрвал между элементами)
+        // Без проверки инетрвал будет увеличиваться при каждом вызове функции
+        if (setsRecycleView.itemDecorationCount == 0 ) {
+            setsRecycleView.addItemDecoration(SpacesItemDecoration(13))
+        }
     }
 
     /** Пересобирает адаптер для нового ArrayList */
@@ -121,6 +146,44 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener{
         setMonthView()
     }
 
+    /** Обрабатывает нажатие на элемент упражнения */
+    override fun onSetItemClick(position: Int, sets: GridLayout) {
+        /*Log.e(TAG, "12345")
+        // Создаем объект подхода
+        val newSet = Set(1, 30, 1)
+        setsList[position].sets.add(newSet)
+        setAdapter.setsAdapter.notifyDataSetChanged()*/
+        val newSetTextView: TextView = TextView(this)
+        newSetTextView.setTextSize(
+            TypedValue.COMPLEX_UNIT_PX,
+            50F
+        )
+
+        /** Задаем вес для строчек и столбцов */
+        val rowSpec: GridLayout.Spec  = GridLayout.spec(GridLayout.UNDEFINED, 1.0f)
+        val colSpec: GridLayout.Spec  = GridLayout.spec(GridLayout.UNDEFINED, 1.0f);
+        val params: GridLayout.LayoutParams  = GridLayout.LayoutParams(rowSpec, colSpec)
+
+        //params.setGravity(Gravity.CENTER)
+        when (x%3) {
+            0 -> params.setGravity(Gravity.LEFT)
+            1 -> params.setGravity(Gravity.CENTER)
+            2 -> params.setGravity(Gravity.RIGHT)
+            else -> {
+                params.setGravity(Gravity.LEFT)
+            }
+        }
+
+        x+=1
+
+
+        newSetTextView.setTextColor(this.resources.getColorStateList(R.color.gray))
+        newSetTextView.text = "1: [150x15] "
+
+        sets.addView(newSetTextView, params)
+
+    }
+
     /** Обрабатывает нажатие на элемент календаря */
     override fun onItemClick(position: Int, dayText: String) {
         if(dayText != "")
@@ -130,18 +193,16 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener{
         }
     }
 
+    /** Функция добавления нового упражнения в ArrayList с последующим перезапуском адапетра */
     fun addSet(view: View)
     {
-        // Создаем объект подхода
-        val newSet = Set(1, 15, 15)
-        // Создаем массив из 5 объектов ранее созданного подхода
-        val sets: ArrayList<Set> = ArrayList()
-        for(i in 1..5) sets.add(newSet)
-
         // Создаем объект списка подходов
         val newSetsCard = SetsCard(1, "Жим штанги", sets)
         // Создаем массив и добавляем в него ранее созданный список
         setsList.add(newSetsCard)
-        setSetView()
+        // Пересобираем адаптер
+        setAdapter.notifyDataSetChanged()
+        // Скролим до добавленного элемента
+        setsRecycleView.smoothScrollToPosition((setsRecycleView.adapter?.itemCount ?: 1) - 1)
     }
 }
