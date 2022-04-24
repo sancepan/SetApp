@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 
+/** Адаптер для заполнения календаря числами из списка daysOfMonth */
 class CalendarAdapter(private val daysOfMonth: ArrayList<String>, private val onItemListener: OnItemListener): RecyclerView.Adapter<CalendarViewHolder>(){
 
     @NonNull
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): CalendarViewHolder {
-        //val inflater: LayoutInflater = LayoutInflater.from(parent.context)
-        //val view: View = inflater.inflate(R.layout.calendar_cell, parent, false)
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.calendar_cell, parent, false)
         val layoutParams: ViewGroup.LayoutParams = view.layoutParams

@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
+        android:textStyle="bold"
         android:textColor="@color/gray"
         android:textSize="16dp">
     </TextView>
@@ -19,7 +20,7 @@
         android:id="@+id/sets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="3"
+        android:columnCount="1"
         android:layout_below="@+id/set_title">
 
     </GridLayout>

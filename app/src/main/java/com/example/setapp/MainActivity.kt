@@ -34,25 +34,25 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener, SetAda
     // Создаем объект адаптера и менеджера
     private val setAdapter = SetAdapter(setsList, this)
 
-    val sets: ArrayList<Set> = ArrayList()
-
-    var x: Int = 0
-
-
+    val sets1: ArrayList<Set> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Создаем объект подхода
-        val newSet = Set(1, 15, 15)
-        // Создаем массив из 5 объектов ранее созданного подхода
-        for(i in 1..5) sets.add(newSet)
-
+        createData()
         initWidgets()
         selectedDate = LocalDate.now()
         setMonthView()
         setSetView()
+    }
+
+    private fun createData()
+    {
+        // Создаем 5 объектов подхода
+        for(i in 0..4) sets1.add(Set(i, 10 + i%2, 10))
+        // Создаем 2 объкта упражнений с этими подходами
+        setsList.add(SetsCard(0, "Жим штанги", sets1))
     }
 
     /** Связываем переменные с элементами UI (RecyclerView, monthYearTV) */
@@ -63,13 +63,6 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener, SetAda
 
         setsRecycleView = findViewById(R.id.setsRecycleView)
     }
-
-    /**  */
-    private fun setSet()
-    {
-
-    }
-
 
     /** Пересобирает адаптер для нового ArrayList */
     private fun setSetView()
@@ -132,14 +125,14 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener, SetAda
         return date.format(formatter)
     }
 
-    /** Вычитает месяц переменной с датой */
+    /** Вычитает месяц для переменной с датой */
     fun previousMonthAction(view: View)
     {
         selectedDate = selectedDate.minusMonths(1)
         setMonthView()
     }
 
-    /** Прибавляет месяц переменной с датой */
+    /** Прибавляет месяц для переменной с датой */
     fun nextMonthAction(view: View)
     {
         selectedDate = selectedDate.plusMonths(1)
@@ -147,41 +140,11 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener, SetAda
     }
 
     /** Обрабатывает нажатие на элемент упражнения */
-    override fun onSetItemClick(position: Int, sets: GridLayout) {
-        /*Log.e(TAG, "12345")
-        // Создаем объект подхода
-        val newSet = Set(1, 30, 1)
-        setsList[position].sets.add(newSet)
-        setAdapter.setsAdapter.notifyDataSetChanged()*/
-        val newSetTextView: TextView = TextView(this)
-        newSetTextView.setTextSize(
-            TypedValue.COMPLEX_UNIT_PX,
-            50F
-        )
-
-        /** Задаем вес для строчек и столбцов */
-        val rowSpec: GridLayout.Spec  = GridLayout.spec(GridLayout.UNDEFINED, 1.0f)
-        val colSpec: GridLayout.Spec  = GridLayout.spec(GridLayout.UNDEFINED, 1.0f);
-        val params: GridLayout.LayoutParams  = GridLayout.LayoutParams(rowSpec, colSpec)
-
-        //params.setGravity(Gravity.CENTER)
-        when (x%3) {
-            0 -> params.setGravity(Gravity.LEFT)
-            1 -> params.setGravity(Gravity.CENTER)
-            2 -> params.setGravity(Gravity.RIGHT)
-            else -> {
-                params.setGravity(Gravity.LEFT)
-            }
-        }
-
-        x+=1
-
-
-        newSetTextView.setTextColor(this.resources.getColorStateList(R.color.gray))
-        newSetTextView.text = "1: [150x15] "
-
-        sets.addView(newSetTextView, params)
-
+    override fun onSetItemClick(position: Int, itemView: View) {
+        // Добавляем новый подход в список
+        setsList[position].sets.add(Set(setsList[position].sets.size, 13, 12))
+        // Пересобираем адаптер по новому списку
+        setAdapter.notifyDataSetChanged()
     }
 
     /** Обрабатывает нажатие на элемент календаря */
@@ -197,7 +160,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener, SetAda
     fun addSet(view: View)
     {
         // Создаем объект списка подходов
-        val newSetsCard = SetsCard(1, "Жим штанги", sets)
+        val newSetsCard = SetsCard(1, "Жим штанги", ArrayList())
         // Создаем массив и добавляем в него ранее созданный список
         setsList.add(newSetsCard)
         // Пересобираем адаптер

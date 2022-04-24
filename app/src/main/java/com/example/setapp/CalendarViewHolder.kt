@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CalendarViewHolder(itemView: View, private val onItemListener: CalendarAdapter.OnItemListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-    /** TextView для элемента (числа) календаря */
     val daysOfMonth: TextView = itemView.findViewById(R.id.cellDayText)
 
     init {
