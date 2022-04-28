@@ -1,11 +1,11 @@
-package com.example.setapp
+package com.example.setapp.presentation.calendar
 
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.setapp.R
 
-class CalendarViewHolder(itemView: View, private val onItemListener: CalendarAdapter.OnItemListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+class CalendarHolder(itemView: View, private val onItemListener: CalendarAdapter.OnItemListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
     val daysOfMonth: TextView = itemView.findViewById(R.id.cellDayText)
 
