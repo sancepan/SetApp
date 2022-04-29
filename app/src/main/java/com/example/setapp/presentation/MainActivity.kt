@@ -1,14 +1,9 @@
 package com.example.setapp.presentation
 
-import android.app.Activity
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.view.Window
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,13 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.setapp.R
-import com.example.setapp.data.repository.ApproachRepositoryImpl
 import com.example.setapp.data.repository.ExerciseRepositoryImpl
-import com.example.setapp.domain.models.Approach
 import com.example.setapp.domain.models.Exercise
 import com.example.setapp.domain.use_case.*
-import com.example.setapp.domain.use_case.approach.AddApproach
-import com.example.setapp.domain.use_case.exercise.AddExercise
 import com.example.setapp.domain.use_case.exercise.DeleteLastExercise
 import com.example.setapp.presentation.calendar.CalendarAdapter
 import com.example.setapp.presentation.workout.ExerciseAdapter
@@ -70,6 +61,9 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
 
     // Создаем объект адаптера и менеджера
     private val setAdapter by lazy { ExerciseAdapter(setsList, this) }
+
+    // Создаем объект адаптера и менеджера
+    //private val calendarAdapter by lazy { CalendarAdapter(daysInMonthArray.execute(selectedDate), this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -123,6 +117,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
      * объекту RecyclerView */
     private fun setSetView()
     {
+
         // Создаем Layout-менеджер
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 1)
         // Присваиваем менеджер объекту RecyclerView
@@ -142,14 +137,19 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
     /** Пересобирает адаптер для нового ArrayList */
     private fun setMonthView()
     {
+
+        calendarRecyclerView = findViewById(R.id.calendarRecyclerView)
+
         // Задаем заголовок
         monthYearText.text = monthYearFromDate.execute(selectedDate)
-        // Создаем массив месяца
-        val daysInMonth: ArrayList<String> = daysInMonthArray.execute(selectedDate, selectedDate)
+
+        val recyclerHeight = calendarRecyclerView.height
 
         // Создаем адаптер
-        val calendarAdapter = CalendarAdapter(daysInMonth, this)
-        // создаем Layout-менеджер
+        val calendarAdapter = CalendarAdapter(daysInMonthArray.execute(selectedDate), this)
+
+
+        // Создаем Layout-менеджер
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(applicationContext, 7)
         // Присваиваем Layout-менеджер объекту RecyclerView
         calendarRecyclerView.layoutManager = layoutManager

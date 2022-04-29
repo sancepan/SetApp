@@ -9,9 +9,9 @@ import kotlin.collections.ArrayList
  * (числа не входящие в месяц заполняются пустыми значениями,
  * всего 42 элемента) по заданной дате */
 class DaysInMonthArray {
-    fun execute(date: LocalDate, selectedDate: LocalDate): ArrayList<String>{
+    fun execute(selectedDate: LocalDate): ArrayList<String>{
         val daysInMonthArray: ArrayList<String> = ArrayList()
-        val yearMonth: YearMonth = YearMonth.from(date)
+        val yearMonth: YearMonth = YearMonth.from(selectedDate)
 
         val daysInMonth: Int = yearMonth.lengthOfMonth()
 
