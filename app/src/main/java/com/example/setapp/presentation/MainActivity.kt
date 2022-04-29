@@ -20,9 +20,7 @@ import com.example.setapp.data.repository.ApproachRepositoryImpl
 import com.example.setapp.data.repository.ExerciseRepositoryImpl
 import com.example.setapp.domain.models.Approach
 import com.example.setapp.domain.models.Exercise
-import com.example.setapp.domain.use_case.DaysInMonthArray
-import com.example.setapp.domain.use_case.LoadFromDBToMemory
-import com.example.setapp.domain.use_case.MonthYearFromDate
+import com.example.setapp.domain.use_case.*
 import com.example.setapp.domain.use_case.approach.AddApproach
 import com.example.setapp.domain.use_case.exercise.AddExercise
 import com.example.setapp.domain.use_case.exercise.DeleteLastExercise
@@ -49,10 +47,10 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
     private val setsList: ArrayList<Exercise> = ArrayList()
 
     private val exerciseRepository by lazy { ExerciseRepositoryImpl(applicationContext) }
-    private val approachRepository by lazy { ApproachRepositoryImpl(applicationContext) }
+    //private val approachRepository by lazy { ApproachRepositoryImpl(applicationContext) }
 
-    private val addApproach by lazy { AddApproach(approachRepository) }
-    private val addExercise by lazy { AddExercise(exerciseRepository) }
+    //private val addApproach by lazy { AddApproach(approachRepository) }
+    //private val addExercise by lazy { AddExercise(exerciseRepository) }
     // private val getApproaches by lazy { GetApproaches(approachRepository) }
     // private val getExercises by lazy { GetExercises(exerciseRepository) }
     private val deleteLastExercise by lazy { DeleteLastExercise(exerciseRepository) }
@@ -60,6 +58,12 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
     private val loadFromDBToMemory by lazy {  LoadFromDBToMemory(applicationContext) }
 
     private val daysInMonthArray by lazy {  DaysInMonthArray() }
+
+    private val showApproachDialog by lazy {  ShowApproachDialog(applicationContext) }
+
+    private val showExerciseDialog by lazy {  ShowExerciseDialog(applicationContext) }
+
+
 
     /** Преобразует формат yyyy-MM-dd в MMMM-yyyy */
     private val monthYearFromDate by lazy {  MonthYearFromDate() }
@@ -77,59 +81,6 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
         selectedDate = LocalDate.now()
         setMonthView()
         setSetView()
-    }
-
-    /** Диалоговое окно для создания подхода */
-    fun showApproachDialog(activity: Activity, position: Int) {
-        val dialog = Dialog(activity)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        // Удаляет фон у диалога
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCancelable(true)
-        dialog.setContentView(R.layout.rep_dialog)
-        val weightBox: EditText = dialog.findViewById(R.id.weight)
-        val repsBox: EditText = dialog.findViewById(R.id.rep)
-        val addBtn: Button = dialog.findViewById(R.id.addBtn)
-        addBtn.setOnClickListener(View.OnClickListener {
-            if (weightBox.text.isEmpty() and repsBox.text.isEmpty()) {
-                val toast = Toast.makeText(
-                    applicationContext,
-                    "Не указан вес и количество повторений", Toast.LENGTH_SHORT
-                )
-                toast.show()
-            } else if (weightBox.text.isEmpty()) {
-                val toast = Toast.makeText(
-                    applicationContext,
-                    "Не указан вес", Toast.LENGTH_SHORT
-                )
-                toast.show()
-            } else if (repsBox.text.isEmpty()) {
-                val toast = Toast.makeText(
-                    applicationContext,
-                    "Не указано количество повторений", Toast.LENGTH_SHORT
-                )
-                toast.show()
-            } else {
-                try {
-                    // Получаем информацию из EditText
-                    val weight = weightBox.text.toString().toInt()
-                    val reps = repsBox.text.toString().toInt()
-
-                    addApproach.execute(Approach(0, setsList[position].approaches.size, weight, reps), setsList[position].id)
-                    loadFromDBToMemory.execute(setsList)
-                    setAdapter.notifyDataSetChanged()
-
-                    dialog.dismiss()
-                } catch (e: Exception) {
-                    val toast = Toast.makeText(
-                        applicationContext,
-                        "Поля были некоректно заполнены", Toast.LENGTH_SHORT
-                    )
-                    toast.show()
-                }
-            }
-        })
-        dialog.show()
     }
 
     /** Связываем переменные с элементами UI (RecyclerView, monthYearTV) */
@@ -157,6 +108,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
             deleteLastExercise.execute( setsList[viewHolder.adapterPosition].id )
             loadFromDBToMemory.execute(setsList)
             setAdapter.notifyDataSetChanged()
+            if(setsList.isNotEmpty()) setsRecycleView.smoothScrollToPosition((setsRecycleView.adapter?.itemCount ?: 1) - 1)
         }
 
         /** Функция проверяющая, что свайп проходит по последнему элементу RecycleView */
@@ -221,11 +173,7 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
 
     /** Обрабатывает нажатие на элемент упражнения */
     override fun onSetItemClick(position: Int, itemView: View) {
-        // Добавляем подход в БД, переносим данные из нее в кеш и пересобираем адаптер
-        /*addApproach.execute(Approach(0, setsList[position].approaches.size, 15, 15), setsList[position].id)
-        loadFromDBToMemory.execute(setsList)
-        setAdapter.notifyDataSetChanged()*/
-        showApproachDialog(this@MainActivity, position)
+        showApproachDialog.execute(this@MainActivity, position, setsList, setAdapter)
     }
 
     /** Обрабатывает нажатие на элемент календаря */
@@ -240,9 +188,6 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
     /** Функция добавления нового упражнения в ArrayList с последующим перезапуском адапетра */
     fun addWorkout(view: View)
     {
-        addExercise.execute(Exercise(0, "123", ArrayList()))
-        loadFromDBToMemory.execute(setsList)
-        setAdapter.notifyDataSetChanged()
-        setsRecycleView.smoothScrollToPosition((setsRecycleView.adapter?.itemCount ?: 1) - 1)
+        showExerciseDialog.execute(this@MainActivity, setsList, setAdapter)
     }
 }

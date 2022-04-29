@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:padding="18dp"
+    android:background="@drawable/dialog_shape">
+
+    <LinearLayout
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/exercise_name"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:hint="Название упражнения"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/light_gray"
+            android:background="@drawable/input_shape"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/addBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="18dp"
+        android:textStyle="bold"
+        android:text="Добавить"
+        android:layout_below="@+id/input"
+        android:background="@drawable/button"/>
+
+</RelativeLayout>
