@@ -1,10 +1,11 @@
 package com.example.setapp.domain.use_case.workout
 
-import com.example.setapp.domain.models.Exercise
+import com.example.setapp.domain.models.Workout
+import com.example.setapp.domain.repository.WorkoutRepository
 
 /** Добавление тренировки */
-class AddWorkout() {
-    fun execute(workout: Exercise){
-
+class AddWorkout(private val workoutRepository: WorkoutRepository) {
+    fun execute(workout: Workout){
+        workoutRepository.addWorkout(workout)
     }
 }

@@ -1,14 +1,18 @@
 package com.example.setapp
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.setapp.domain.models.Approach
 import com.example.setapp.domain.models.Exercise
+import com.example.setapp.domain.models.Workout
+import java.time.LocalDate
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -56,6 +60,28 @@ class SQLiteManager(context: Context,
         onCreate(sqLiteDatabase)
     }
 
+    fun getWorkoutByDate(date: LocalDate): Cursor{
+        val db = this.readableDatabase
+        //db.execSQL("DROP TABLE IF EXISTS " + APPROACH_TABLE_NAME);
+        //val query = "SELECT * FROM $APPROACH_TABLE_NAME WHERE $APPROACH_COLUMN_EXERCISE_ID = ?"
+
+        return db.query(
+            WORKOUT_TABLE_NAME, arrayOf(WORKOUT_COLUMN_ID, WORKOUT_COLUMN_DATE),
+            "$WORKOUT_COLUMN_DATE = ?", arrayOf(date.toString()),
+            null, null, null
+        )
+    }
+
+    fun addWorkout(workout: Workout){
+
+        val values = ContentValues()
+        values.put(WORKOUT_COLUMN_DATE, workout.date.toString())
+        val db = this.writableDatabase
+        db.insert(WORKOUT_TABLE_NAME, null, values)
+        db.close()
+
+    }
+
     /** Добавление подхода в упражнение с указанным ID */
     fun addApproach(approach: Approach, exerciseID: Int){
         val values = ContentValues()
@@ -68,6 +94,7 @@ class SQLiteManager(context: Context,
         db.close()
     }
 
+
     /** Получение подходов из упражнения с указанным ID */
     fun getApproaches(exerciseID: Int): Cursor{
         val db = this.readableDatabase
@@ -79,26 +106,30 @@ class SQLiteManager(context: Context,
             "$APPROACH_COLUMN_EXERCISE_ID = ?", arrayOf(exerciseID.toString()),
             null, null, null
         )
-
         //return db.rawQuery(query, arrayOf(exerciseID.toString()))
     }
 
     /** Добавление упражнения */
-    fun addExercise(exercise: Exercise){
+    fun addExercise(exercise: Exercise, workoutID: Int){
         val values = ContentValues()
         values.put(EXERCISE_COLUMN_NAME, exercise.name)
-        //values.put(EXERCISE_COLUMN_WORKOUT_ID, 1)
+        values.put(EXERCISE_COLUMN_WORKOUT_ID, workoutID)
         val db = this.writableDatabase
         db.insert(EXERCISE_TABLE_NAME, null, values)
+        Log.e(TAG, "1: " + exercise.name)
         db.close()
     }
 
-    /** Получение упражнений из указанной тренировки */
+    /** Получение упражнения по id Тренировки*/
     fun getExercises(workoutID: Int): Cursor{
+        Log.e(TAG, "idDB: $workoutID")
         val db = this.readableDatabase
         //val query = "SELECT * FROM $EXERCISE_TABLE_NAME WHERE $EXERCISE_COLUMN_WORKOUT_ID = $workoutID"
-        val query = "SELECT * FROM $EXERCISE_TABLE_NAME"
-        return db.rawQuery(query, null)
+        return db.query(
+            EXERCISE_TABLE_NAME, arrayOf(EXERCISE_COLUMN_ID, EXERCISE_COLUMN_NAME, EXERCISE_COLUMN_WORKOUT_ID),
+            "$EXERCISE_COLUMN_WORKOUT_ID = ?", arrayOf(workoutID.toString()),
+            null, null, null
+        )
     }
 
     /** Удаление упражнения с указанным ID */

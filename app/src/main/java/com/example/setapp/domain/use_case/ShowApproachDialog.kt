@@ -12,10 +12,13 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.setapp.R
 import com.example.setapp.data.repository.ApproachRepositoryImpl
+import com.example.setapp.data.repository.WorkoutRepositoryImpl
 import com.example.setapp.domain.models.Approach
 import com.example.setapp.domain.models.Exercise
 import com.example.setapp.domain.use_case.approach.AddApproach
+import com.example.setapp.domain.use_case.workout.GetWorkoutIdByDate
 import com.example.setapp.presentation.workout.ExerciseAdapter
+import java.time.LocalDate
 
 /** Диалоговое окно для создания подхода */
 class ShowApproachDialog(private val context: Context) {
@@ -24,7 +27,10 @@ class ShowApproachDialog(private val context: Context) {
     private val addApproach by lazy { AddApproach(approachRepository) }
     private val loadFromDBToMemory by lazy {  LoadFromDBToMemory(context) }
 
-    fun execute(activity: Activity, position: Int, arrayList: ArrayList<Exercise>, adapter: ExerciseAdapter) {
+    private val workoutRepository by lazy { WorkoutRepositoryImpl(context) }
+    private val getWorkoutIdByDate by lazy { GetWorkoutIdByDate(workoutRepository) }
+
+    fun execute(activity: Activity, position: Int, arrayList: ArrayList<Exercise>, adapter: ExerciseAdapter, date: LocalDate) {
         val dialog = Dialog(activity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         // Удаляет фон у диалога
@@ -59,8 +65,9 @@ class ShowApproachDialog(private val context: Context) {
                     val weight = weightBox.text.toString().toInt()
                     val reps = repsBox.text.toString().toInt()
 
+
                     addApproach.execute(Approach(0, arrayList[position].approaches.size, weight, reps), arrayList[position].id)
-                    loadFromDBToMemory.execute(arrayList)
+                    loadFromDBToMemory.execute(arrayList, getWorkoutIdByDate.execute(date))
                     adapter.notifyDataSetChanged()
 
                     dialog.dismiss()

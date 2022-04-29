@@ -5,8 +5,8 @@ import com.example.setapp.domain.repository.ExerciseRepository
 
 /** Добавление упражнения */
 class AddExercise(private val exerciseRepository: ExerciseRepository) {
-    fun execute(exercise: Exercise)
+    fun execute(exercise: Exercise, workoutId: Int)
     {
-        exerciseRepository.addExercise(exercise)
+        exerciseRepository.addExercise(exercise, workoutId)
     }
 }

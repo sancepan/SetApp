@@ -140,7 +140,7 @@
         android:layout_below="@+id/calendar_days" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/workout_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/calendarRecyclerView"
@@ -158,8 +158,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/add"
-        android:layout_below="@+id/date"
-        android:layout_marginBottom="10dp" />
+        android:layout_below="@+id/workout_date"
+        android:layout_marginBottom="15dp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add"
@@ -168,12 +168,12 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/button"
         android:gravity="center"
+        android:onClick="addExercise"
         android:paddingHorizontal="20dp"
         android:text="Добавить упражнение"
         android:textAllCaps="false"
-        android:onClick="addWorkout"
         android:textColor="@color/white"
         android:textSize="18dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
 </RelativeLayout>

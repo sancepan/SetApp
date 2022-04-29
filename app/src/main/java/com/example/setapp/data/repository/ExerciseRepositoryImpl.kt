@@ -1,8 +1,10 @@
 package com.example.setapp.data.repository
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.database.Cursor
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.setapp.SQLiteManager
 import com.example.setapp.domain.models.Exercise
@@ -21,7 +23,7 @@ class ExerciseRepositoryImpl(private val context: Context): ExerciseRepository {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun getExercises(workoutID: Int): ArrayList<Exercise> {
 
-        val c: Cursor = dbHandler.getExercises(1)
+        val c: Cursor = dbHandler.getExercises(workoutID)
         var data: ArrayList<Exercise> = ArrayList()
         if (c != null) {
             while (c.moveToNext()) {
@@ -39,8 +41,9 @@ class ExerciseRepositoryImpl(private val context: Context): ExerciseRepository {
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    override fun addExercise(exercise: Exercise) {
-        dbHandler.addExercise(exercise)
+    override fun addExercise(exercise: Exercise, workoutID: Int) {
+        Log.e(TAG, "1: " + workoutID)
+        dbHandler.addExercise(exercise, workoutID)
     }
 
 }
