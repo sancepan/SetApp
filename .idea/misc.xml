@@ -3,10 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidProj/SetApp/app/src/main/res/drawable/button.xml" value="0.2265" />
+        <entry key="..\:/AndroidProj/SetApp/app/src/main/res/drawable/button.xml" value="0.176" />
+        <entry key="..\:/AndroidProj/SetApp/app/src/main/res/drawable/dialog_shape.xml" value="0.1605" />
+        <entry key="..\:/AndroidProj/SetApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1605" />
+        <entry key="..\:/AndroidProj/SetApp/app/src/main/res/drawable/input_shape.xml" value="0.1605" />
         <entry key="..\:/AndroidProj/SetApp/app/src/main/res/drawable/set_bckg.xml" value="0.1" />
         <entry key="..\:/AndroidProj/SetApp/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/AndroidProj/SetApp/app/src/main/res/layout/calendar_cell.xml" value="0.1" />
+        <entry key="..\:/AndroidProj/SetApp/app/src/main/res/layout/rep_dialog.xml" value="0.25" />
         <entry key="..\:/AndroidProj/SetApp/app/src/main/res/layout/set_cell.xml" value="0.234375" />
         <entry key="..\:/AndroidProj/SetApp/app/src/main/res/layout/set_item.xml" value="0.225" />
         <entry key="..\:/SetApp/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />

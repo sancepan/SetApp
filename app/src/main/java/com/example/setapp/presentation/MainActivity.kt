@@ -1,7 +1,14 @@
 package com.example.setapp.presentation
 
+import android.app.Activity
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -70,6 +77,59 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
         selectedDate = LocalDate.now()
         setMonthView()
         setSetView()
+    }
+
+    /** Диалоговое окно для создания подхода */
+    fun showApproachDialog(activity: Activity, position: Int) {
+        val dialog = Dialog(activity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // Удаляет фон у диалога
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.rep_dialog)
+        val weightBox: EditText = dialog.findViewById(R.id.weight)
+        val repsBox: EditText = dialog.findViewById(R.id.rep)
+        val addBtn: Button = dialog.findViewById(R.id.addBtn)
+        addBtn.setOnClickListener(View.OnClickListener {
+            if (weightBox.text.isEmpty() and repsBox.text.isEmpty()) {
+                val toast = Toast.makeText(
+                    applicationContext,
+                    "Не указан вес и количество повторений", Toast.LENGTH_SHORT
+                )
+                toast.show()
+            } else if (weightBox.text.isEmpty()) {
+                val toast = Toast.makeText(
+                    applicationContext,
+                    "Не указан вес", Toast.LENGTH_SHORT
+                )
+                toast.show()
+            } else if (repsBox.text.isEmpty()) {
+                val toast = Toast.makeText(
+                    applicationContext,
+                    "Не указано количество повторений", Toast.LENGTH_SHORT
+                )
+                toast.show()
+            } else {
+                try {
+                    // Получаем информацию из EditText
+                    val weight = weightBox.text.toString().toInt()
+                    val reps = repsBox.text.toString().toInt()
+
+                    addApproach.execute(Approach(0, setsList[position].approaches.size, weight, reps), setsList[position].id)
+                    loadFromDBToMemory.execute(setsList)
+                    setAdapter.notifyDataSetChanged()
+
+                    dialog.dismiss()
+                } catch (e: Exception) {
+                    val toast = Toast.makeText(
+                        applicationContext,
+                        "Поля были некоректно заполнены", Toast.LENGTH_SHORT
+                    )
+                    toast.show()
+                }
+            }
+        })
+        dialog.show()
     }
 
     /** Связываем переменные с элементами UI (RecyclerView, monthYearTV) */
@@ -162,9 +222,10 @@ class MainActivity : AppCompatActivity(), CalendarAdapter.OnItemListener,
     /** Обрабатывает нажатие на элемент упражнения */
     override fun onSetItemClick(position: Int, itemView: View) {
         // Добавляем подход в БД, переносим данные из нее в кеш и пересобираем адаптер
-        addApproach.execute(Approach(0, setsList[position].approaches.size, 15, 15), setsList[position].id)
+        /*addApproach.execute(Approach(0, setsList[position].approaches.size, 15, 15), setsList[position].id)
         loadFromDBToMemory.execute(setsList)
-        setAdapter.notifyDataSetChanged()
+        setAdapter.notifyDataSetChanged()*/
+        showApproachDialog(this@MainActivity, position)
     }
 
     /** Обрабатывает нажатие на элемент календаря */
